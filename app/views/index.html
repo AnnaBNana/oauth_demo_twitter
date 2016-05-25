@@ -1,8 +1,24 @@
 <html>
   <head>
+    <title>Look at mah tweets</title>
     <link rel="stylesheet" href="/static/css/styles.css" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $.get('/welcome/index_json', function(res) {
+          var tweets = JSON.parse(res)
+          for (i = 0; i < tweets.length; i++) {
+            $('.tweets').append("<p>" + tweets[i].text + "</p>");
+          }
+        });
+      });
+    </script>
   </head>
   <body>
-    The best place to start is the "WelcomeController.py" file in app/controllers.
+    <h1>Check out deez tweets:</h1>
+    <a href="/welcome/index_json"><button type="button" name="button">click me!</button></a>
+    <div class="tweets">
+
+    </div>
   </body>
 </html>

@@ -7,34 +7,36 @@
     Create a controller using this template
 """
 from system.core.controller import *
+import oauth2 as oauth
+import json
+import signing
 
 class Welcome(Controller):
     def __init__(self, action):
         super(Welcome, self).__init__(action)
-        """
-            This is an example of loading a model.
-            Every controller has access to the load_model method.
-        """
+
+        CONSUMER_KEY = signing.consumer_key()
+        CONSUMER_SECRET = signing.consumer_secret()
+        ACCESS_KEY = signing.access_key()
+        ACCESS_SECRET = signing.access_secret()
+
+        consumer = oauth.Consumer(key=CONSUMER_KEY, secret=CONSUMER_SECRET)
+        access_token = oauth.Token(key=ACCESS_KEY, secret=ACCESS_SECRET)
+        global client
+        client = oauth.Client(consumer, access_token)
+
         self.load_model('WelcomeModel')
         self.db = self._app.db
 
-        """
-        
-        This is an example of a controller method that will load a view for the client 
-
-        """
-   
     def index(self):
-        """
-        A loaded model is accessible through the models attribute 
-        self.models['WelcomeModel'].get_users()
-        
-        self.models['WelcomeModel'].add_message()
-        # messages = self.models['WelcomeModel'].grab_messages()
-        # user = self.models['WelcomeModel'].get_user()
-        # to pass information on to a view it's the same as it was with Flask
-        
-        # return self.load_view('index.html', messages=messages, user=user)
-        """
         return self.load_view('index.html')
+    def index_json(self):
+        timeline_endpoint = "https://api.twitter.com/1.1/statuses/home_timeline.json"
+        response, data = client.request(timeline_endpoint)
+        # print "response", response
+        proto_tweets = json.dumps(data)
+        tweets = json.loads(proto_tweets)
+        return tweets
 
+    def test(self):
+        return self.load_view('test.html')
