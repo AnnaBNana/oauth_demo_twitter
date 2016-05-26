@@ -3,4 +3,4 @@
 *.pyc
 venv/*
 __pycache__/*
-signing.py
+sign.py

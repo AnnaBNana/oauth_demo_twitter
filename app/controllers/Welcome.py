@@ -9,7 +9,7 @@
 from system.core.controller import *
 import oauth2 as oauth
 import json
-import signing
+import sign
 
 class Welcome(Controller):
     def __init__(self, action):
